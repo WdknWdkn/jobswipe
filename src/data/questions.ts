@@ -1,7 +1,7 @@
 import { Question } from '../types';
 
 export const questions: Question[] = [
-  { id: '1', content: '初任給は同世代平均より高い方が良い', category: 'salary', weight: 2 },
+  { id: '1', content: '高い給与のためなら週末も働くことは厭わない', category: 'salary', weight: 2 },
   { id: '2', content: '若いうちから責任のある仕事を任せてもらいたい', category: 'growth', weight: 3 },
   { id: '3', content: '残業は少ない方が良い', category: 'worklife', weight: 2 },
   { id: '4', content: '社会に与えるインパクトを重視したい', category: 'social', weight: 3 },

@@ -1,4 +1,4 @@
-import { Answer, CategoryScore, Question } from '../types';
+import { Answer, CategoryScore, Question, CategoryType } from '../types';
 import { questions } from '../data/questions';
 
 export const calculateCategoryScores = (answers: Answer[]): CategoryScore[] => {
@@ -16,9 +16,30 @@ export const calculateCategoryScores = (answers: Answer[]): CategoryScore[] => {
     }
   });
 
-  return Object.entries(initial).map(([category, { score, total }]) => ({
-    category: category as Question['category'],
-    score,
-    percentage: total ? Math.round((score / total) * 100) : 0,
-  }));
+  const base = Object.entries(initial).reduce<Record<CategoryType, CategoryScore>>((acc, [category, { score, total }]) => {
+    const pct = total ? Math.round((score / total) * 100) : 0;
+    acc[category as CategoryType] = { category: category as CategoryType, score, percentage: pct };
+    return acc;
+  }, {} as Record<CategoryType, CategoryScore>);
+
+  const tradeOffPairs: Array<[CategoryType, CategoryType]> = [
+    ['salary', 'worklife'],
+    ['challenge', 'stability'],
+    ['growth', 'worklife'],
+    ['social', 'salary'],
+    ['skill', 'growth'],
+  ];
+
+  tradeOffPairs.forEach(([a, b]) => {
+    const scoreA = base[a].percentage;
+    const scoreB = base[b].percentage;
+    if (scoreA > 50) {
+      base[b].percentage = Math.max(0, base[b].percentage - (scoreA - 50));
+    }
+    if (scoreB > 50) {
+      base[a].percentage = Math.max(0, base[a].percentage - (scoreB - 50));
+    }
+  });
+
+  return Object.values(base);
 };
