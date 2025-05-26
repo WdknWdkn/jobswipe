@@ -44,7 +44,7 @@ export const Diagnosis = (): JSX.Element => {
 
   const question = questions[current];
   return (
-    <DiagnosisContext.Provider value={{ answers, setAnswers }}>
+    <DiagnosisContext.Provider value={{ answers, setAnswers, aiContent: { detailed_analysis: null, smart_recommendations: null, company_criteria: null, career_roadmap: null }, isGeneratingAI: { detailed_analysis: false, smart_recommendations: false, company_criteria: false, career_roadmap: false }, aiError: null, generateAIContent: async () => {}, regenerateAIContent: async () => {}, clearAIError: () => {} }}>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex flex-col">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between mb-4">

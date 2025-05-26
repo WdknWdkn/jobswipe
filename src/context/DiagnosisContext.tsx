@@ -1,9 +1,16 @@
 import { createContext, useContext } from 'react';
 import { Answer } from '../types';
+import { AIGeneratedContent, AIContentType } from "../types/ai";
 
 interface DiagnosisContextProps {
   answers: Answer[];
   setAnswers: (answers: Answer[]) => void;
+  aiContent: Record<AIContentType, AIGeneratedContent | null>;
+  isGeneratingAI: Record<AIContentType, boolean>;
+  aiError: string | null;
+  generateAIContent: (type: AIContentType) => Promise<void>;
+  regenerateAIContent: (type: AIContentType) => Promise<void>;
+  clearAIError: () => void;
 }
 
 export const DiagnosisContext = createContext<DiagnosisContextProps | null>(null);
