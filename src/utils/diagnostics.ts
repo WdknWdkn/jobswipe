@@ -18,7 +18,7 @@ const personalityMap: Record<CategoryType, string> = {
 export const calculateScores = (answers: Answer[]): DiagnosisResult => {
   const scores = calculateCategoryScores(answers);
   const sorted = [...scores].sort((a, b) => b.percentage - a.percentage);
-  const topCategories = sorted.slice(0, 3).map((s) => s.category);
+  const topCategories = sorted.slice(0, 5).map((s) => s.category);
   const personalityType = personalityMap[sorted[0].category];
   const recs = topCategories.flatMap((c) => recommendations[c]);
   return {
