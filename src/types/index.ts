@@ -29,9 +29,16 @@ export interface CategoryScore {
   percentage: number;
 }
 
+export interface Recommendation {
+  industry: string;
+  pros: string[];
+  cons: string[];
+  requiredTradeoffs: string[];
+}
+
 export interface DiagnosisResult {
   scores: CategoryScore[];
   personalityType: string;
   topCategories: CategoryType[];
-  recommendations: string[];
+  recommendations: Recommendation[];
 }
