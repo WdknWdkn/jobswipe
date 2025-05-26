@@ -2,6 +2,8 @@ import { useLocation, Link } from 'react-router-dom';
 import { useState, useEffect, type SVGProps } from 'react';
 import { calculateScores } from '../utils/diagnostics';
 import { categories } from '../data/categories';
+import { useAIGeneration } from "../hooks/useAIGeneration";
+import { AIContentSection } from "../components/AIContent/AIContentSection";
 import type { Answer, DiagnosisResult } from '../types';
 import { CompanyEvaluator } from '../components/CompanyEvaluator/CompanyEvaluator';
 import {
@@ -155,6 +157,7 @@ export const Results = (): JSX.Element => {
   const [activeTab, setActiveTab] = useState<'overview' | 'recommendations' | 'company-eval'>('overview');
   const [animatedData, setAnimatedData] = useState<typeof fullData>([]);
   const [shareOpen, setShareOpen] = useState(false);
+  const { aiContent, isGeneratingAI, aiError, generate } = useAIGeneration(answers);
 
   const fullData = result.scores.map((s) => ({
     category: categories[s.category],
@@ -167,6 +170,13 @@ export const Results = (): JSX.Element => {
       setAnimatedData(fullData);
     }, 500);
     return () => clearTimeout(timer);
+  }, [answers]);
+  useEffect(() => {
+    if (answers.length > 0) {
+      setTimeout(() => generate("detailed_analysis"), 1000);
+      setTimeout(() => generate("smart_recommendations"), 2000);
+      setTimeout(() => generate("company_criteria"), 3000);
+    }
   }, [answers]);
 
   const personality = personalityDetails[result.personalityType] ?? {
@@ -298,6 +308,11 @@ export const Results = (): JSX.Element => {
       <div className="p-6">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'recommendations' && <RecommendationsTab />}
+        <div className="mt-6 space-y-4">
+          <AIContentSection title="あなたの就活軸 詳細分析" icon="🔍" content={aiContent.detailed_analysis} isLoading={isGeneratingAI.detailed_analysis} onGenerate={() => generate("detailed_analysis")} />
+          <AIContentSection title="スマート推奨" icon="✨" content={aiContent.smart_recommendations} isLoading={isGeneratingAI.smart_recommendations} onGenerate={() => generate("smart_recommendations")} />
+          <AIContentSection title="企業評価基準" icon="📊" content={aiContent.company_criteria} isLoading={isGeneratingAI.company_criteria} onGenerate={() => generate("company_criteria")} />
+        </div>
         {activeTab === 'company-eval' && <CompanyEvaluator result={result} />}
       </div>
       {shareOpen && (
