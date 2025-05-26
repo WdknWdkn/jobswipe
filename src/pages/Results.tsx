@@ -281,15 +281,15 @@ export const Results = (): JSX.Element => {
       </div>
       <div className="px-6 py-4 bg-white/80 backdrop-blur-sm border-b border-gray-200">
         <div className="flex gap-1">
-          <button onClick={() => setActiveTab('overview')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-sm transition-all ${activeTab === 'overview' ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}>
+          <button onClick={() => setActiveTab('overview')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl font-medium text-sm transition-all ${activeTab === 'overview' ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}>
             <TrophyIcon className="w-4 h-4" />
             <span>総合結果</span>
           </button>
-          <button onClick={() => setActiveTab('recommendations')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-sm transition-all ${activeTab === 'recommendations' ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}>
+          <button onClick={() => setActiveTab('recommendations')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl font-medium text-sm transition-all ${activeTab === 'recommendations' ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}>
             <BuildingIcon className="w-4 h-4" />
             <span>おすすめ</span>
           </button>
-          <button onClick={() => setActiveTab('company-eval')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-sm transition-all ${activeTab === 'company-eval' ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}>
+          <button onClick={() => setActiveTab('company-eval')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl font-medium text-sm transition-all ${activeTab === 'company-eval' ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}>
             <ClipboardIcon className="w-4 h-4" />
             <span>企業評価</span>
           </button>

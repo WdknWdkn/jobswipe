@@ -1,4 +1,11 @@
-import { CategoryType, Recommendation } from '../types';
+import { CategoryType } from '../types';
+
+export interface Recommendation {
+  industry: string;
+  pros: string[];
+  cons: string[];
+  requiredTradeoffs: string[];
+}
 
 export const recommendations: Record<CategoryType, Recommendation[]> = {
   salary: [

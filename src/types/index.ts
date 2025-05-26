@@ -1,3 +1,5 @@
+import { Recommendation } from '../data/recommendations';
+
 export type CategoryType =
   | 'salary'
   | 'growth'
@@ -27,13 +29,6 @@ export interface CategoryScore {
   category: CategoryType;
   score: number;
   percentage: number;
-}
-
-export interface Recommendation {
-  industry: string;
-  pros: string[];
-  cons: string[];
-  requiredTradeoffs: string[];
 }
 
 export interface DiagnosisResult {

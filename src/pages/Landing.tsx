@@ -80,8 +80,8 @@ export const Landing = (): JSX.Element => (
           </div>
           <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 shadow-sm">
             <UsersIcon className="w-5 h-5 text-purple-500 mx-auto mb-1" />
-            <div className="text-lg font-bold text-gray-900">1万人</div>
-            <div className="text-xs text-gray-600">が利用</div>
+            <div className="text-lg font-bold text-gray-900">AI相談</div>
+            <div className="text-xs text-gray-600">につながる</div>
           </div>
         </div>
 
@@ -104,7 +104,7 @@ export const Landing = (): JSX.Element => (
     </div>
 
     <div className="text-center py-4 text-xs text-gray-400">
-      Powered by AI • Made with ❤️ for job seekers
+      Powered by WdknWdkn
     </div>
   </div>
 );
