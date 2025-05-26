@@ -3,6 +3,7 @@ import { useState, useEffect, type SVGProps } from 'react';
 import { calculateScores } from '../utils/diagnostics';
 import { categories } from '../data/categories';
 import type { Answer, DiagnosisResult } from '../types';
+import { CompanyEvaluator } from '../components/CompanyEvaluator/CompanyEvaluator';
 import {
   RadarChart,
   PolarGrid,
@@ -58,6 +59,13 @@ const BuildingIcon = (props: SVGProps<SVGSVGElement>): JSX.Element => (
     <path d="M3 21V3h18v18" />
     <path d="M9 21V9h6v12" />
     <path d="M9 3v3h6V3" />
+  </svg>
+);
+
+const ClipboardIcon = (props: SVGProps<SVGSVGElement>): JSX.Element => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M9 2h6v4H9z" />
+    <rect x="5" y="6" width="14" height="16" rx="2" />
   </svg>
 );
 
@@ -144,7 +152,7 @@ export const Results = (): JSX.Element => {
   const answers: Answer[] = location.state?.answers ?? [];
   const result: DiagnosisResult = calculateScores(answers);
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'recommendations'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'recommendations' | 'company-eval'>('overview');
   const [animatedData, setAnimatedData] = useState<typeof fullData>([]);
   const [shareOpen, setShareOpen] = useState(false);
 
@@ -273,7 +281,7 @@ export const Results = (): JSX.Element => {
       </div>
       <div className="px-6 py-4 bg-white/80 backdrop-blur-sm border-b border-gray-200">
         <div className="flex gap-1">
-          <button onClick={() => setActiveTab('overview')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-sm transition-all ${activeTab === 'overview' ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}> 
+          <button onClick={() => setActiveTab('overview')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-sm transition-all ${activeTab === 'overview' ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}>
             <TrophyIcon className="w-4 h-4" />
             <span>総合結果</span>
           </button>
@@ -281,11 +289,16 @@ export const Results = (): JSX.Element => {
             <BuildingIcon className="w-4 h-4" />
             <span>おすすめ</span>
           </button>
+          <button onClick={() => setActiveTab('company-eval')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-sm transition-all ${activeTab === 'company-eval' ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}>
+            <ClipboardIcon className="w-4 h-4" />
+            <span>企業評価</span>
+          </button>
         </div>
       </div>
       <div className="p-6">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'recommendations' && <RecommendationsTab />}
+        {activeTab === 'company-eval' && <CompanyEvaluator result={result} />}
       </div>
       {shareOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
