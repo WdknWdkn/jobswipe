@@ -17,7 +17,7 @@
    - (YES の weight 合計 / 総 weight) × 100 をパーセンテージとして算出します。
 3. **カテゴライズ**
    - `utils/diagnostics.ts` の `calculateScores` でスコアをもとに以下を決定します。
-     - 各カテゴリのスコアをパーセンテージ順に並び替え、上位 3 つを `topCategories` とする。
+    - 各カテゴリのスコアをパーセンテージ順に並び替え、上位 5 つを `topCategories` とする。
      - 最上位カテゴリから `personalityType` を決定する (`personalityMap`)。
      - `topCategories` を用いて `recommendations` を生成する。
    - `Results.tsx` で `ResultChart` とともにこれらの情報を表示します。

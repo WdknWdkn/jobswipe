@@ -204,12 +204,12 @@ export const Results = (): JSX.Element => {
         </div>
       </div>
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">あなたが重視する軸 TOP3</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">あなたが重視する軸 TOP5</h3>
         <div className="space-y-3">
           {fullData
             .slice()
             .sort((a, b) => b.value - a.value)
-            .slice(0, 3)
+            .slice(0, 5)
             .map((item, index) => (
               <div key={item.category} className="flex items-center gap-3">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : 'bg-amber-600'}`}>{index + 1}</div>
