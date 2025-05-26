@@ -12,8 +12,6 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@use-gesture/react": "^10.2.10",
-    "react-spring": "^9.7.2",
     "framer-motion": "^10.16.5",
     "recharts": "^2.8.0",
     "html2canvas": "^1.4.1",
