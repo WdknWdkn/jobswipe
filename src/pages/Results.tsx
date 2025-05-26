@@ -61,6 +61,25 @@ const BuildingIcon = (props: SVGProps<SVGSVGElement>): JSX.Element => (
   </svg>
 );
 
+const XIcon = (props: SVGProps<SVGSVGElement>): JSX.Element => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M4 4l16 16" />
+    <path d="M20 4L4 20" />
+  </svg>
+);
+
+const LineIcon = (props: SVGProps<SVGSVGElement>): JSX.Element => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M4 3h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H8l-4 4V4a1 1 0 0 1 1-1z" />
+  </svg>
+);
+
+const FacebookIcon = (props: SVGProps<SVGSVGElement>): JSX.Element => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M14 8h3V4h-3c-2 0-3 1-3 3v1H9v4h2v8h4v-8h3l1-4h-4V7c0-.6.2-1 1-1z" />
+  </svg>
+);
+
 interface PersonalityDetail {
   description: string;
   traits: string[];
@@ -127,6 +146,7 @@ export const Results = (): JSX.Element => {
 
   const [activeTab, setActiveTab] = useState<'overview' | 'recommendations'>('overview');
   const [animatedData, setAnimatedData] = useState<typeof fullData>([]);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const fullData = result.scores.map((s) => ({
     category: categories[s.category],
@@ -146,6 +166,11 @@ export const Results = (): JSX.Element => {
     traits: [],
     color: 'bg-gray-400',
   };
+
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent('診断結果をチェック！')}`;
+  const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(currentUrl)}`;
+  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
 
   const OverviewTab = (): JSX.Element => (
     <div className="space-y-6">
@@ -262,9 +287,31 @@ export const Results = (): JSX.Element => {
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'recommendations' && <RecommendationsTab />}
       </div>
+      {shareOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 w-72">
+            <h2 className="text-center font-semibold mb-4">結果を共有</h2>
+            <div className="flex justify-around mb-4">
+              <a href={twitterUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-1 text-sm text-gray-700">
+                <XIcon className="w-8 h-8" />
+                <span>X</span>
+              </a>
+              <a href={lineUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-1 text-sm text-gray-700">
+                <LineIcon className="w-8 h-8 text-green-500" />
+                <span>LINE</span>
+              </a>
+              <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-1 text-sm text-gray-700">
+                <FacebookIcon className="w-8 h-8 text-blue-600" />
+                <span>Facebook</span>
+              </a>
+            </div>
+            <button onClick={() => setShareOpen(false)} className="w-full py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700">閉じる</button>
+          </div>
+        </div>
+      )}
       <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-sm border-t border-gray-200">
         <div className="flex gap-3">
-          <button className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2">
+          <button onClick={() => setShareOpen(true)} className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2">
             <ShareIcon className="w-5 h-5" />
             <span>結果を共有</span>
           </button>
