@@ -1,5 +1,5 @@
 import { useLocation, Link } from 'react-router-dom';
-import { useState, useEffect, type SVGProps } from 'react';
+import { useState, useEffect, type SVGProps, useMemo, useRef } from 'react';
 import { calculateScores } from '../utils/diagnostics';
 import { categories } from '../data/categories';
 import { useAIGeneration } from "../hooks/useAIGeneration";
@@ -152,32 +152,67 @@ const personalityDetails: Record<string, PersonalityDetail> = {
 export const Results = (): JSX.Element => {
   const location = useLocation();
   const answers: Answer[] = location.state?.answers ?? [];
-  const result: DiagnosisResult = calculateScores(answers);
+  
+  // 結果の計算を一度だけ行い、再計算を防止
+  const result = useMemo(() => calculateScores(answers), [answers]);
 
   const [activeTab, setActiveTab] = useState<'overview' | 'recommendations' | 'company-eval'>('overview');
-  const [animatedData, setAnimatedData] = useState<typeof fullData>([]);
   const [shareOpen, setShareOpen] = useState(false);
+  
+  // グラフデータを事前計算してメモ化
+  const chartData = useMemo(() => 
+    result.scores.map((s) => ({
+      category: categories[s.category],
+      value: s.percentage,
+      fullMark: 100,
+    }))
+  , [result.scores]);
+  
+  // アニメーションデータを別の状態として管理
+  const [animatedData, setAnimatedData] = useState<any[]>([]);
+  
+  // AI生成関連のフック
   const { aiContent, isGeneratingAI, aiError, generate } = useAIGeneration(answers);
 
-  const fullData = result.scores.map((s) => ({
-    category: categories[s.category],
-    value: s.percentage,
-    fullMark: 100,
-  }));
-
+  // アニメーション処理を最初の一度だけ実行するための状態
+  const animationRef = useRef(false);
+  
   useEffect(() => {
+    // すでにアニメーションが実行されていたら何もしない
+    if (animationRef.current) return;
+    
+    // アニメーション状態をセット
+    animationRef.current = true;
+    
+    // 遅延してからデータをセット
     const timer = setTimeout(() => {
-      setAnimatedData(fullData);
+      setAnimatedData(chartData);
     }, 500);
+    
     return () => clearTimeout(timer);
-  }, [answers]);
+  }, [chartData]);
+  
+  // AI生成は初回マウント時に一度だけ実行
+  const aiInitialized = useRef(false);
+  
   useEffect(() => {
-    if (answers.length > 0) {
-      setTimeout(() => generate("detailed_analysis"), 1000);
-      setTimeout(() => generate("smart_recommendations"), 2000);
-      setTimeout(() => generate("company_criteria"), 3000);
-    }
-  }, [answers]);
+    // AIがすでに初期化されていたら何もしない
+    if (aiInitialized.current || answers.length === 0) return;
+    
+    // 初期化フラグをセット
+    aiInitialized.current = true;
+    
+    // AI生成を順番に実行
+    const detailedTimer = setTimeout(() => generate("detailed_analysis"), 1000);
+    const recommendationsTimer = setTimeout(() => generate("smart_recommendations"), 2000);
+    const criteriaTimer = setTimeout(() => generate("company_criteria"), 3000);
+    
+    return () => {
+      clearTimeout(detailedTimer);
+      clearTimeout(recommendationsTimer);
+      clearTimeout(criteriaTimer);
+    };
+  }, [answers.length, generate]);
 
   const personality = personalityDetails[result.personalityType] ?? {
     description: '',
@@ -212,7 +247,7 @@ export const Results = (): JSX.Element => {
         <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">あなたの就活軸バランス</h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <RadarChart data={animatedData}>
+            <RadarChart data={chartData}>
               <PolarGrid stroke="#e5e7eb" />
               <PolarAngleAxis dataKey="category" tick={{ fontSize: 11, fill: '#6b7280' }} />
               <PolarRadiusAxis angle={90} domain={[0, 100]} tick={false} tickCount={6} />
@@ -224,7 +259,7 @@ export const Results = (): JSX.Element => {
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">あなたが重視する軸 TOP5</h3>
         <div className="space-y-3">
-          {fullData
+          {chartData
             .slice()
             .sort((a, b) => b.value - a.value)
             .slice(0, 5)
@@ -243,6 +278,16 @@ export const Results = (): JSX.Element => {
               </div>
             ))}
         </div>
+      </div>
+      
+      <div className="mt-4">
+        <AIContentSection 
+          title="あなたの就活軸 詳細分析" 
+          icon="🔍" 
+          content={aiContent.detailed_analysis} 
+          isLoading={isGeneratingAI.detailed_analysis} 
+          onGenerate={() => generate("detailed_analysis")} 
+        />
       </div>
     </div>
   );
@@ -271,6 +316,32 @@ export const Results = (): JSX.Element => {
           )}
         </div>
       ))}
+      
+      <div className="mt-4">
+        <AIContentSection 
+          title="スマート推奨" 
+          icon="✨" 
+          content={aiContent.smart_recommendations} 
+          isLoading={isGeneratingAI.smart_recommendations} 
+          onGenerate={() => generate("smart_recommendations")} 
+        />
+      </div>
+    </div>
+  );
+
+  const CompanyEvalTab = (): JSX.Element => (
+    <div className="space-y-6">
+      <CompanyEvaluator result={result} />
+      
+      <div className="mt-4">
+        <AIContentSection 
+          title="企業評価基準" 
+          icon="📊" 
+          content={aiContent.company_criteria} 
+          isLoading={isGeneratingAI.company_criteria} 
+          onGenerate={() => generate("company_criteria")} 
+        />
+      </div>
     </div>
   );
 
@@ -308,12 +379,7 @@ export const Results = (): JSX.Element => {
       <div className="p-6">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'recommendations' && <RecommendationsTab />}
-        <div className="mt-6 space-y-4">
-          <AIContentSection title="あなたの就活軸 詳細分析" icon="🔍" content={aiContent.detailed_analysis} isLoading={isGeneratingAI.detailed_analysis} onGenerate={() => generate("detailed_analysis")} />
-          <AIContentSection title="スマート推奨" icon="✨" content={aiContent.smart_recommendations} isLoading={isGeneratingAI.smart_recommendations} onGenerate={() => generate("smart_recommendations")} />
-          <AIContentSection title="企業評価基準" icon="📊" content={aiContent.company_criteria} isLoading={isGeneratingAI.company_criteria} onGenerate={() => generate("company_criteria")} />
-        </div>
-        {activeTab === 'company-eval' && <CompanyEvaluator result={result} />}
+        {activeTab === 'company-eval' && <CompanyEvalTab />}
       </div>
       {shareOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
