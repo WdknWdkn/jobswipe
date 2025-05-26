@@ -12,9 +12,13 @@ interface Props {
    * 表示順位。0が最前面となる。
    */
   index?: number;
+  /**
+   * 質問カテゴリ名を表示するためのラベル
+   */
+  categoryLabel?: string;
 }
 
-export const SwipeCard = ({ content, onSwipe, index = 0 }: Props): JSX.Element => {
+export const SwipeCard = ({ content, onSwipe, index = 0, categoryLabel }: Props): JSX.Element => {
   const controls = useAnimation();
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-20, 20]);
@@ -47,7 +51,7 @@ export const SwipeCard = ({ content, onSwipe, index = 0 }: Props): JSX.Element =
       onDragEnd={handleDragEnd}
       animate={controls}
       style={{ x, rotate, zIndex: 100 - index, scale: 1 - index * 0.05, top: index * 8 }}
-      className="absolute w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-2xl flex items-center justify-center select-none touch-pan-y border-2 border-indigo-300"
+      className="absolute w-full h-full bg-white rounded-3xl shadow-xl flex flex-col items-center justify-center select-none touch-pan-y border-2 border-gray-100 p-8 text-center"
     >
       <motion.div
         className="absolute top-5 left-5 text-green-500 font-bold text-3xl bg-white px-3 py-1 rounded-lg shadow-md"
@@ -61,7 +65,10 @@ export const SwipeCard = ({ content, onSwipe, index = 0 }: Props): JSX.Element =
       >
         NO
       </motion.div>
-      <div className="px-8 py-12 text-center text-xl font-medium text-white bg-black/20 backdrop-blur-sm rounded-lg w-[90%] shadow-lg">{content}</div>
+      {categoryLabel && (
+        <div className="mb-6 text-xs font-medium text-gray-500">{categoryLabel}</div>
+      )}
+      <div className="text-xl font-bold text-gray-900 leading-relaxed">{content}</div>
     </motion.div>
   );
 };
