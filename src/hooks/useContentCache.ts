@@ -4,8 +4,10 @@ const KEY_PREFIX = 'aiContentCache';
 
 export const useContentCache = () => {
   const buildKey = (type: AIContentType, result: DiagnosisResult) => {
-    const hash = result.personalityType + JSON.stringify(result.scores.map(s => s.percentage));
-    return `${KEY_PREFIX}-${type}-${btoa(hash)}`;
+    const raw = result.personalityType + JSON.stringify(result.scores.map((s) => s.percentage));
+    // Encode using base64 safely even when raw contains multibyte characters
+    const utf8 = encodeURIComponent(raw);
+    return `${KEY_PREFIX}-${type}-${btoa(utf8)}`;
   };
 
   const get = (type: AIContentType, result: DiagnosisResult): AIGeneratedContent | null => {
