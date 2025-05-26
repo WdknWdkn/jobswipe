@@ -47,21 +47,21 @@ export const SwipeCard = ({ content, onSwipe, index = 0 }: Props): JSX.Element =
       onDragEnd={handleDragEnd}
       animate={controls}
       style={{ x, rotate, zIndex: 100 - index, scale: 1 - index * 0.05, top: index * 8 }}
-      className="absolute w-full h-full bg-white rounded-xl shadow-xl flex items-center justify-center select-none touch-pan-y"
+      className="absolute w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-2xl flex items-center justify-center select-none touch-pan-y border-2 border-indigo-300"
     >
       <motion.div
-        className="absolute top-5 left-5 text-green-500 font-bold text-3xl"
+        className="absolute top-5 left-5 text-green-500 font-bold text-3xl bg-white px-3 py-1 rounded-lg shadow-md"
         style={{ opacity: likeOpacity }}
       >
         YES
       </motion.div>
       <motion.div
-        className="absolute top-5 right-5 text-red-500 font-bold text-3xl"
+        className="absolute top-5 right-5 text-red-500 font-bold text-3xl bg-white px-3 py-1 rounded-lg shadow-md"
         style={{ opacity: nopeOpacity }}
       >
         NO
       </motion.div>
-      <div className="px-8 text-center text-lg">{content}</div>
+      <div className="px-8 py-12 text-center text-xl font-medium text-white bg-black/20 backdrop-blur-sm rounded-lg w-[90%] shadow-lg">{content}</div>
     </motion.div>
   );
 };

@@ -40,7 +40,7 @@ export const Diagnosis = (): JSX.Element => {
     <DiagnosisContext.Provider value={{ answers, setAnswers }}>
       <Layout>
         <ProgressBar current={current} total={questions.length} />
-        <div className="mt-4 relative h-80">
+        <div className="mt-8 relative h-[70vh] max-h-[500px] w-[90%] max-w-md mx-auto">
           {questions
             .slice(current, current + 3)
             .map((q, i) => ({ q, idx: i }))
@@ -53,6 +53,9 @@ export const Diagnosis = (): JSX.Element => {
                 index={idx}
               />
             ))}
+        </div>
+        <div className="mt-6 text-center text-gray-500 text-sm">
+          左右にスワイプして回答してください
         </div>
       </Layout>
     </DiagnosisContext.Provider>
