@@ -42,3 +42,29 @@ export interface DiagnosisResult {
   topCategories: CategoryType[];
   recommendations: Recommendation[];
 }
+
+export interface ValueCriterion {
+  category: CategoryType;
+  categoryName: string;
+  importance: 'high' | 'medium' | 'low';
+  score: number;
+  percentage: number;
+  description: string;
+  tradeoffs?: string[];
+}
+
+export interface EvaluationPrompt {
+  valueCriteria: ValueCriterion[];
+  prompt: string;
+  generatedAt: Date;
+  promptType: 'simple' | 'detailed';
+}
+
+export interface CategoryInfo {
+  category: CategoryType;
+  name: string;
+  description: string;
+  icon: string;
+  keywords: string[];
+  tradeoffPartners?: CategoryType[];
+}
