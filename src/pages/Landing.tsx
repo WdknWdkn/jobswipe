@@ -61,7 +61,7 @@ export const Landing = (): JSX.Element => (
             あなたの理想の働き方
           </h2>
           <p className="text-gray-600 text-sm leading-relaxed">
-            Tinderライクな直感的操作で、
+            直感的なスワッピング動作で、
             <br />
             本当に大切にしたい就活軸を発見
           </p>
@@ -87,7 +87,7 @@ export const Landing = (): JSX.Element => (
 
         <Link
           to="/instructions"
-          className="group w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+          className="group block w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
         >
           <div className="flex items-center justify-center gap-2">
             <span>無料で診断を始める</span>

@@ -60,7 +60,7 @@ export const Instructions = (): JSX.Element => {
   }, [steps.length]);
 
   const SwipeDemo = (): JSX.Element => (
-    <div className="relative w-64 h-40 mx-auto">
+    <div className="relative w-full max-w-xs h-40 mx-auto mb-4">
       <div
         className={`absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg transform transition-all duration-500 ${
           isAnimating ? 'scale-95 opacity-80' : 'scale-100'
@@ -70,7 +70,7 @@ export const Instructions = (): JSX.Element => {
           <p className="font-medium">サンプル質問</p>
         </div>
       </div>
-      <div className="absolute -bottom-12 left-0 right-0 flex justify-between items-center px-4">
+      <div className="absolute -bottom-8 left-0 right-0 flex justify-between items-center px-4">
         <div className="flex items-center gap-2 text-red-500">
           <ArrowLeftIcon className="w-5 h-5" />
           <span className="text-sm font-medium">NO</span>
@@ -92,9 +92,9 @@ export const Instructions = (): JSX.Element => {
         <h1 className="flex-1 text-center text-lg font-semibold text-gray-900">診断のやり方</h1>
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-6">
-        <div className="max-w-sm mx-auto text-center">
-          <div className="flex justify-center gap-2 mb-8">
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="w-full max-w-sm mx-auto text-center">
+          <div className="flex justify-center gap-2 mb-6">
             {steps.map((_, index) => (
               <div
                 key={index}
@@ -105,16 +105,16 @@ export const Instructions = (): JSX.Element => {
             ))}
           </div>
 
-          <div className="mb-8">
+          <div className="mb-6">
             <SwipeDemo />
           </div>
 
-          <div className="mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">{steps[currentStep].title}</h2>
-            <p className="text-gray-600 leading-relaxed">{steps[currentStep].description}</p>
+          <div className="mb-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-2">{steps[currentStep].title}</h2>
+            <p className="text-gray-600 text-sm leading-relaxed">{steps[currentStep].description}</p>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 mb-8 shadow-sm">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 mb-6 shadow-sm">
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -139,7 +139,7 @@ export const Instructions = (): JSX.Element => {
 
           <Link
             to="/diagnosis"
-            className="group w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+            className="group block w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
           >
             <div className="flex items-center justify-center gap-2">
               <span>診断スタート</span>
