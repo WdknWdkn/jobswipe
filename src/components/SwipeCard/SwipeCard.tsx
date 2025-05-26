@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { useGesture } from '@use-gesture/react';
-import { animated, useSpring } from '@react-spring/web';
+import { motion, useAnimation } from 'framer-motion';
 
 interface Props {
   content: string;
@@ -8,23 +6,33 @@ interface Props {
 }
 
 export const SwipeCard = ({ content, onSwipe }: Props): JSX.Element => {
-  const [{ x }, api] = useSpring(() => ({ x: 0 }));
-  const bind = useGesture({
-    onDragEnd: ({ offset: [ox] }) => {
-      if (ox > 100) onSwipe('right');
-      else if (ox < -100) onSwipe('left');
-      api.start({ x: 0 });
-    },
-    onDrag: ({ offset: [ox] }) => api.start({ x: ox }),
-  });
+  const controls = useAnimation();
+
+  const handleDragEnd = (_: unknown, info: { offset: { x: number } }): void => {
+    const { x } = info.offset;
+    if (x > 100) {
+      void controls.start({ x: 300, opacity: 0 }).then(() => {
+        onSwipe('right');
+        controls.set({ x: 0, opacity: 1 });
+      });
+    } else if (x < -100) {
+      void controls.start({ x: -300, opacity: 0 }).then(() => {
+        onSwipe('left');
+        controls.set({ x: 0, opacity: 1 });
+      });
+    } else {
+      void controls.start({ x: 0 });
+    }
+  };
 
   return (
-    <animated.div
-      {...bind()}
+    <motion.div
+      drag="x"
+      onDragEnd={handleDragEnd}
+      animate={controls}
       className="bg-white p-4 rounded shadow-md touch-pan-y select-none"
-      style={{ x }}
     >
       {content}
-    </animated.div>
+    </motion.div>
   );
 };
