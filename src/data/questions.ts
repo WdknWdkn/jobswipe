@@ -1,34 +1,53 @@
 import { Question } from '../types';
 
 export const questions: Question[] = [
+  // 給与・待遇のトレードオフ
   { id: '1', content: '高い給与のためなら週末も働くことは厭わない', category: 'salary', weight: 2 },
-  { id: '2', content: '若いうちから責任のある仕事を任せてもらいたい', category: 'growth', weight: 3 },
-  { id: '3', content: '残業は少ない方が良い', category: 'worklife', weight: 2 },
-  { id: '4', content: '社会に与えるインパクトを重視したい', category: 'social', weight: 3 },
-  { id: '5', content: '安定した企業で長く働きたい', category: 'stability', weight: 2 },
-  { id: '6', content: '新しい技術や仕組みに挑戦したい', category: 'challenge', weight: 3 },
-  { id: '7', content: 'チームワークを大切にしたい', category: 'relationship', weight: 2 },
-  { id: '8', content: '企業理念に共感できるかが重要', category: 'culture', weight: 3 },
-  { id: '9', content: '希望する勤務地で働きたい', category: 'location', weight: 2 },
-  { id: '10', content: '専門性を深められる環境で働きたい', category: 'skill', weight: 3 },
-  { id: '11', content: '給与よりも福利厚生が充実している方が良い', category: 'salary', weight: 2 },
-  { id: '12', content: '成長速度の早い環境を望む', category: 'growth', weight: 3 },
-  { id: '13', content: '休日はしっかり休みたい', category: 'worklife', weight: 2 },
-  { id: '14', content: '社会課題の解決に貢献したい', category: 'social', weight: 3 },
-  { id: '15', content: '大手企業の安定感に魅力を感じる', category: 'stability', weight: 2 },
-  { id: '16', content: 'リスクを取ってでも革新的なことをしたい', category: 'challenge', weight: 3 },
-  { id: '17', content: '上司や同僚との良好な関係を重視する', category: 'relationship', weight: 2 },
-  { id: '18', content: '社風が自分に合うかを重要視する', category: 'culture', weight: 3 },
-  { id: '19', content: '転勤が少ない会社が良い', category: 'location', weight: 2 },
-  { id: '20', content: '資格取得支援があると嬉しい', category: 'skill', weight: 2 },
-  { id: '21', content: '成果に応じた報酬を得たい', category: 'salary', weight: 3 },
-  { id: '22', content: '明確なキャリアパスが描ける', category: 'growth', weight: 2 },
-  { id: '23', content: 'プライベートと仕事のバランスを取りたい', category: 'worklife', weight: 3 },
-  { id: '24', content: '社会的意義のある仕事に携わりたい', category: 'social', weight: 2 },
-  { id: '25', content: '景気変動に左右されにくい業界を選びたい', category: 'stability', weight: 3 },
-  { id: '26', content: '常に新しいことに挑戦し続けたい', category: 'challenge', weight: 2 },
-  { id: '27', content: '人間関係が良好な職場で働きたい', category: 'relationship', weight: 3 },
-  { id: '28', content: '企業のビジョンに共感できるか重視する', category: 'culture', weight: 2 },
-  { id: '29', content: 'リモートワークが可能な環境を求める', category: 'location', weight: 3 },
-  { id: '30', content: '専門スキルを高められる研修制度が欲しい', category: 'skill', weight: 2 },
+  { id: '11', content: '福利厚生が充実していれば、基本給が少し低くても良い', category: 'salary', weight: 2 },
+  { id: '21', content: '成果給で収入が不安定になっても、頑張った分だけ稼ぎたい', category: 'salary', weight: 3 },
+
+  // 成長・キャリアのトレードオフ  
+  { id: '2', content: '安定性を犠牲にしても、急成長できる環境を選びたい', category: 'growth', weight: 3 },
+  { id: '12', content: '教育制度が不十分でも、実戦で鍛えられる厳しい環境が良い', category: 'growth', weight: 3 },
+  { id: '22', content: '転職前提でスキルアップするより、一社で着実にキャリアを積みたい', category: 'stability', weight: 2 },
+
+  // ワークライフバランスのトレードオフ
+  { id: '3', content: '昇進が遅くなっても、残業時間は抑えたい', category: 'worklife', weight: 2 },
+  { id: '13', content: '有給を自由に取れるなら、給与が平均より低くても構わない', category: 'worklife', weight: 2 },
+  { id: '23', content: '家族との時間を犠牲にしてでも、仕事で大きな成果を上げたい', category: 'growth', weight: 3 },
+
+  // 社会貢献のトレードオフ
+  { id: '4', content: '給与が低くても、社会課題の解決に取り組む仕事をしたい', category: 'social', weight: 3 },
+  { id: '14', content: '社会貢献よりも、まずは自分の経済的安定を優先したい', category: 'salary', weight: 3 },
+  { id: '24', content: '将来性が不透明でも、環境問題に取り組む企業で働きたい', category: 'social', weight: 2 },
+
+  // 安定性のトレードオフ
+  { id: '5', content: '大手企業の安定性より、ベンチャーでの挑戦を選ぶ', category: 'challenge', weight: 2 },
+  { id: '15', content: '親の反対があっても、自分がやりたい不安定な業界を選ぶ', category: 'challenge', weight: 2 },
+  { id: '25', content: '業界の将来性より、現在の企業の安定性を重視する', category: 'stability', weight: 3 },
+
+  // チャレンジ・革新性のトレードオフ
+  { id: '6', content: '失敗のリスクが高くても、新しい技術や仕組みに挑戦したい', category: 'challenge', weight: 3 },
+  { id: '16', content: '周囲に理解されなくても、革新的なアイデアを追求したい', category: 'challenge', weight: 3 },
+  { id: '26', content: '安定した業務より、常に変化のある刺激的な環境を選ぶ', category: 'challenge', weight: 2 },
+
+  // 人間関係・チームワークのトレードオフ
+  { id: '7', content: '人間関係が悪くても、自分のスキルアップを最優先にしたい', category: 'skill', weight: 2 },
+  { id: '17', content: '個人の成果より、チーム全体の成功を重視したい', category: 'relationship', weight: 2 },
+  { id: '27', content: '競争が激しい職場でも、切磋琢磨できる環境の方が良い', category: 'growth', weight: 3 },
+
+  // 企業文化・理念のトレードオフ
+  { id: '8', content: '企業理念が素晴らしくても、労働条件が悪ければ転職する', category: 'worklife', weight: 3 },
+  { id: '18', content: '社風が合わなくても、有名企業で働くことを優先したい', category: 'stability', weight: 3 },
+  { id: '28', content: '知名度が低くても、価値観が合う企業を選びたい', category: 'culture', weight: 2 },
+
+  // 勤務地・働き方のトレードオフ
+  { id: '9', content: '希望しない地方勤務でも、キャリアアップできるなら受け入れる', category: 'growth', weight: 2 },
+  { id: '19', content: '転勤が多くても、全国規模で事業展開する企業で働きたい', category: 'growth', weight: 2 },
+  { id: '29', content: '通勤時間が長くても、オフィスでの対面コミュニケーションを重視する', category: 'relationship', weight: 3 },
+
+  // 専門性・スキルのトレードオフ
+  { id: '10', content: '一つの分野を極めるより、幅広いスキルを身につけたい', category: 'growth', weight: 3 },
+  { id: '20', content: '好きでない分野でも、将来性があれば専門性を磨きたい', category: 'skill', weight: 2 },
+  { id: '30', content: '資格取得より、実務経験を積むことを優先したい', category: 'skill', weight: 2 },
 ];
