@@ -5,7 +5,7 @@ import { Diagnosis } from './pages/Diagnosis';
 import { Results } from './pages/Results';
 
 export const App = (): JSX.Element => (
-  <BrowserRouter>
+  <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/instructions" element={<Instructions />} />
