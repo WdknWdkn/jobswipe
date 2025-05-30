@@ -58,11 +58,12 @@ export const RegistrationForm = ({ onSubmit }: Props): JSX.Element => {
           <p className="text-red-500 text-xs mt-1">{errors.email}</p>
         )}
       </div>
+      <p className="text-xs text-gray-500">入力内容は k-wada@ielove-group.jp 宛に送信されます。</p>
       <button
         type="submit"
         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
       >
-        登録して診断を見る
+        送信して診断を見る
       </button>
     </form>
   );

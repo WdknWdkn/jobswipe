@@ -97,7 +97,7 @@ export const Landing = (): JSX.Element => (
 
         <div className="mt-4 flex items-center justify-center gap-4 text-xs text-gray-500">
           <span>✓ ログイン不要</span>
-          <span>✓ 名前とメールアドレス登録でAI診断</span>
+          <span>✓ 名前とメールアドレス送信でAI診断</span>
           <span>✓ 完全無料</span>
         </div>
       </div>
