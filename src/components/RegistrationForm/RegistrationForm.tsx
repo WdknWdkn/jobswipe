@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 interface Props {
-  onSubmit: (name: string, email: string) => void;
+  onSubmit: (name: string, email: string) => Promise<void>;
 }
 
 export const RegistrationForm = ({ onSubmit }: Props): JSX.Element => {
@@ -22,10 +22,10 @@ export const RegistrationForm = ({ onSubmit }: Props): JSX.Element => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    onSubmit(name.trim(), email.trim());
+    await onSubmit(name.trim(), email.trim());
   };
 
   return (
