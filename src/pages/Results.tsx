@@ -210,8 +210,7 @@ export const Results = (): JSX.Element => {
   
   useEffect(() => {
     // AIがすでに初期化されていたら何もしない
-    if (aiInitialized.current || answers.length === 0 || !isRegistered) return;
-    
+    if (aiInitialized.current || answers.length === 0 || !isRegistered) return;    
     // 初期化フラグをセット
     aiInitialized.current = true;
     
