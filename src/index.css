@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Prevent pinch-zoom and browser back swipe on mobile */
+html,
+body {
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
