@@ -5,6 +5,9 @@ import { AIGeneratedContent, AIContentType } from "../types/ai";
 interface DiagnosisContextProps {
   answers: Answer[];
   setAnswers: (answers: Answer[]) => void;
+  userName: string;
+  userEmail: string;
+  setUserInfo: (name: string, email: string) => void;
   aiContent: Record<AIContentType, AIGeneratedContent | null>;
   isGeneratingAI: Record<AIContentType, boolean>;
   aiError: string | null;

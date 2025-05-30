@@ -4,6 +4,8 @@ import { calculateScores } from '../utils/diagnostics';
 import { categories } from '../data/categories';
 import { useAIGeneration } from "../hooks/useAIGeneration";
 import { AIContentSection } from "../components/AIContent/AIContentSection";
+import { RegistrationForm } from "../components/RegistrationForm/RegistrationForm";
+import { EmailService } from "../services/emailService";
 import type { Answer, DiagnosisResult } from '../types';
 import { CompanyEvaluator } from '../components/CompanyEvaluator/CompanyEvaluator';
 import {
@@ -158,6 +160,17 @@ export const Results = (): JSX.Element => {
 
   const [activeTab, setActiveTab] = useState<'overview' | 'recommendations' | 'company-eval'>('overview');
   const [shareOpen, setShareOpen] = useState(false);
+  const [isRegistered, setIsRegistered] = useState<boolean>(() => {
+    return localStorage.getItem('registered') === 'true';
+  });
+
+  const emailService = useMemo(() => new EmailService(), []);
+
+  const handleRegister = (name: string, email: string) => {
+    emailService.sendRegistration(name, email);
+    setIsRegistered(true);
+    localStorage.setItem('registered', 'true');
+  };
   
   // グラフデータを事前計算してメモ化
   const chartData = useMemo(() => 
@@ -197,7 +210,7 @@ export const Results = (): JSX.Element => {
   
   useEffect(() => {
     // AIがすでに初期化されていたら何もしない
-    if (aiInitialized.current || answers.length === 0) return;
+    if (aiInitialized.current || answers.length === 0 || !isRegistered) return;
     
     // 初期化フラグをセット
     aiInitialized.current = true;
@@ -212,7 +225,7 @@ export const Results = (): JSX.Element => {
       clearTimeout(recommendationsTimer);
       clearTimeout(criteriaTimer);
     };
-  }, [answers.length, generate]);
+  }, [answers.length, generate, isRegistered]);
 
   const personality = personalityDetails[result.personalityType] ?? {
     description: '',
@@ -347,6 +360,13 @@ export const Results = (): JSX.Element => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {!isRegistered && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 w-80">
+            <RegistrationForm onSubmit={handleRegister} />
+          </div>
+        </div>
+      )}
       <div className="px-6 py-4 bg-white/80 backdrop-blur-sm border-b border-gray-200">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-gray-900">診断結果</h1>
