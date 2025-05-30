@@ -120,3 +120,17 @@ npm run build
 ```
 
 生成物は `dist/` フォルダに出力されます。
+
+## 環境変数
+
+開発時には `.env.local` を作成し、以下の値を設定してください。
+
+```
+VITE_OPENAI_API_KEY=your_api_key_here
+VITE_AI_PROVIDER=openai
+VITE_AI_MODEL=gpt-4o-mini
+VITE_ENABLE_AI_FEATURES=true
+VITE_EMAIL_API_URL=https://example.com/api/send
+```
+
+`VITE_EMAIL_API_URL` は登録情報を送信するメール送信APIのエンドポイントを指します。
