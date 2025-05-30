@@ -10,6 +10,8 @@ import { DiagnosisContext } from '../context/DiagnosisContext';
 export const Diagnosis = (): JSX.Element => {
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [showHint, setShowHint] = useState(true);
   const navigate = useNavigate();
 
@@ -44,7 +46,7 @@ export const Diagnosis = (): JSX.Element => {
 
   const question = questions[current];
   return (
-    <DiagnosisContext.Provider value={{ answers, setAnswers, aiContent: { detailed_analysis: null, smart_recommendations: null, company_criteria: null, career_roadmap: null }, isGeneratingAI: { detailed_analysis: false, smart_recommendations: false, company_criteria: false, career_roadmap: false }, aiError: null, generateAIContent: async () => {}, regenerateAIContent: async () => {}, clearAIError: () => {} }}>
+    <DiagnosisContext.Provider value={{ answers, setAnswers, userName, userEmail, setUserInfo: (n, e) => { setUserName(n); setUserEmail(e); }, aiContent: { detailed_analysis: null, smart_recommendations: null, company_criteria: null, career_roadmap: null }, isGeneratingAI: { detailed_analysis: false, smart_recommendations: false, company_criteria: false, career_roadmap: false }, aiError: null, generateAIContent: async () => {}, regenerateAIContent: async () => {}, clearAIError: () => {} }}>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex flex-col">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between mb-4">
