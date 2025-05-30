@@ -134,3 +134,24 @@ VITE_EMAIL_API_URL=https://example.com/api/send
 ```
 
 `VITE_EMAIL_API_URL` は登録情報を送信するメール送信APIのエンドポイントを指します。
+
+## メール送信サーバー
+
+プロジェクト内には簡易的なメール送信APIが含まれています。以下の手順で起動できます。
+
+1. ルートに `.env.server` を作成し、SMTP設定を記入します。
+   ```
+   SMTP_HOST=smtp.example.com
+   SMTP_PORT=587
+   SMTP_SECURE=false
+   SMTP_USER=your@example.com
+   SMTP_PASS=yourpassword
+   SMTP_FROM=your@example.com
+   ```
+2. サーバーを起動します。
+   ```bash
+   npm run server:start
+   ```
+3. デフォルトでは `http://localhost:3000/send` でメール送信エンドポイントが利用できます。
+
+フロントエンド側の `VITE_EMAIL_API_URL` をこのエンドポイントに合わせて設定してください。
