@@ -3,11 +3,6 @@
   "outputDirectory": "dist",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
-  "functions": {
-    "api/send.ts": {
-      "runtime": "@vercel/node@18.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
