@@ -167,7 +167,7 @@ export const Results = (): JSX.Element => {
   const emailService = useMemo(() => new EmailService(), []);
 
   const handleRegister = async (name: string, email: string) => {
-    await emailService.sendRegistration(name, email);
+    await emailService.sendRegistration(name, email, answers);
     setIsRegistered(true);
     localStorage.setItem('registered', 'true');
   };

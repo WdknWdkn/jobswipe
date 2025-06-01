@@ -1,40 +1,7 @@
-import express from 'express';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
-import cors from 'cors';
 
-// Load environment variables from .env.server
-dotenv.config({ path: '.env.server' });
-
-const app = express();
-app.use(express.json());
-
-// CORSミドルウェアを設定
-app.use(cors({
-  origin: process.env.ALLOWED_ORIGIN || '*',
-  methods: ['POST']
-}));
-
-// SMTP設定の確認
-const hasSmtpConfig = process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS;
-
-let transport: nodemailer.Transporter | null = null;
-
-if (hasSmtpConfig) {
-  transport = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-} else {
-  console.warn('SMTP configuration not found. Email sending will be simulated.');
-}
-
-// 質問データを模擬的に定義（本来はDBや共通ファイルから読み込み）
+// 質問データを模擬的に定義
 const questionMap: Record<string, string> = {
   '1': '高い給与のためなら週末も働くことは厭わない',
   '2': '安定性を犠牲にしても、急成長できる環境を選びたい',
@@ -68,7 +35,33 @@ const questionMap: Record<string, string> = {
   '30': '資格取得より、実務経験を積むことを優先したい',
 };
 
-app.post('/api/send', async (req, res) => {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // CORS設定
+  const allowedOrigins = [
+    'https://jobswipe.vercel.app',
+    'https://your-custom-domain.com',
+    'http://localhost:3000',
+    'http://localhost:5173'
+  ];
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin as string)) {
+    res.setHeader('Access-Control-Allow-Origin', origin as string);
+  }
+  
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // OPTIONSリクエストに対する応答
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // POSTメソッドのみ許可
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   const { name, email, answers } = req.body;
   
   // デバッグ用ログを追加
@@ -76,10 +69,28 @@ app.post('/api/send', async (req, res) => {
   console.log('Name:', name);
   console.log('Email:', email);
   console.log('Answers length:', answers ? answers.length : 0);
-  console.log('Answers data:', answers);
   
   if (!name || !email) {
     return res.status(400).json({ error: 'Missing name or email' });
+  }
+
+  // SMTP設定の確認
+  const hasSmtpConfig = process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS;
+
+  let transport: nodemailer.Transporter | null = null;
+
+  if (hasSmtpConfig) {
+    transport = nodemailer.createTransporter({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT) || 587,
+      secure: process.env.SMTP_SECURE === 'true',
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+  } else {
+    console.warn('SMTP configuration not found. Email sending will be simulated.');
   }
 
   // スワイプ結果を整理
@@ -122,7 +133,7 @@ ${swipeResultsText}
       // 実際にメール送信
       await transport.sendMail({
         from: process.env.SMTP_FROM || process.env.SMTP_USER,
-        to: 'k-wada@ielove-group.jp', // 固定の宛先
+        to: process.env.EMAIL_TO || 'k-wada@ielove-group.jp', // 環境変数から取得可能
         subject: `就活軸診断の結果登録: ${name}さん`,
         text: emailContent,
       });
@@ -143,10 +154,4 @@ ${swipeResultsText}
     console.error('Email sending error:', err);
     res.status(500).json({ error: 'Failed to send email' });
   }
-});
-
-const port = Number(process.env.PORT) || 3000;
-app.listen(port, () => {
-  console.log(`Email server running on port ${port}`);
-  console.log(`SMTP configured: ${hasSmtpConfig ? 'Yes' : 'No'}`);
-});
+}

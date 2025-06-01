@@ -121,7 +121,58 @@ npm run build
 
 生成物は `dist/` フォルダに出力されます。
 
+## Vercelへのデプロイ
+
+### 1. プロジェクトの準備
+
+Vercel用のAPIエンドポイントが `api/send.ts` として作成されています。このファイルはVercel Functionsとして動作し、メール送信機能を提供します。
+
+### 2. Vercelプロジェクトの作成
+
+1. [Vercel](https://vercel.com/)にアクセスしてアカウントを作成またはログインします。
+2. GitHubリポジトリからプロジェクトをインポートします。
+3. プロジェクト設定で環境変数を設定します。
+
+### 3. 環境変数の設定
+
+Vercelのプロジェクト設定ページで以下の環境変数を設定してください：
+
+#### 必須環境変数（AI機能）
+- `VITE_OPENAI_API_KEY`: OpenAIのAPIキー
+- `VITE_AI_PROVIDER`: `openai`
+- `VITE_AI_MODEL`: `gpt-4o-mini`
+- `VITE_ENABLE_AI_FEATURES`: `true`
+
+#### 必須環境変数（メール送信）
+- `SMTP_HOST`: SMTPサーバーホスト（例：`smtp.gmail.com`）
+- `SMTP_PORT`: SMTPポート（例：`587`）
+- `SMTP_SECURE`: SSL使用の可否（例：`false`）
+- `SMTP_USER`: メール送信用ユーザー名
+- `SMTP_PASS`: メール送信用パスワード（Gmailの場合はアプリパスワード）
+- `SMTP_FROM`: 送信元メールアドレス
+- `EMAIL_TO`: 宛先メールアドレス
+
+### 4. デプロイの実行
+
+環境変数を設定後、以下の手順でデプロイできます：
+
+1. GitHubにコードをプッシュします
+2. Vercelが自動的にビルドとデプロイを開始します
+3. デプロイ完了後、提供されるURLでアプリケーションにアクセスできます
+
+### 5. 動作確認
+
+- フロントエンドアプリケーションが正常に表示されること
+- 診断機能が動作すること
+- メール送信機能が動作すること（名前とメール入力後）
+
+### 6. カスタムドメインの設定（オプション）
+
+Vercelプロジェクト設定でカスタムドメインを設定できます。その場合、`api/send.ts`の`allowedOrigins`配列にドメインを追加してください。
+
 ## 環境変数
+
+### 開発環境
 
 開発時には `.env.local` を作成し、以下の値を設定してください。
 
@@ -130,10 +181,33 @@ VITE_OPENAI_API_KEY=your_api_key_here
 VITE_AI_PROVIDER=openai
 VITE_AI_MODEL=gpt-4o-mini
 VITE_ENABLE_AI_FEATURES=true
-VITE_EMAIL_API_URL=https://example.com/api/send
+VITE_EMAIL_API_URL=http://localhost:3000/api/send
 ```
 
-`VITE_EMAIL_API_URL` は登録情報を送信するメール送信APIのエンドポイントを指します。
+### Vercel本番環境
+
+Vercelにデプロイする際は、プロジェクト設定で以下の環境変数を設定してください：
+
+#### フロントエンド用環境変数
+```
+VITE_OPENAI_API_KEY=your_openai_api_key
+VITE_AI_PROVIDER=openai
+VITE_AI_MODEL=gpt-4o-mini
+VITE_ENABLE_AI_FEATURES=true
+```
+
+#### メール送信用環境変数
+```
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+SMTP_FROM=your-email@gmail.com
+EMAIL_TO=k-wada@ielove-group.jp
+```
+
+`VITE_EMAIL_API_URL` は設定不要です（Vercel Functions使用時は `/api/send` が自動的に使用されます）。
 
 ## メール送信サーバー
 
