@@ -5,7 +5,7 @@
   "installCommand": "npm install",
   "functions": {
     "api/send.ts": {
-      "runtime": "@vercel/node"
+      "runtime": "@vercel/node@18.x"
     }
   },
   "rewrites": [
