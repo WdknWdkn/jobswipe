@@ -147,6 +147,7 @@ VITE_EMAIL_API_URL=https://example.com/api/send
    SMTP_USER=your@example.com
    SMTP_PASS=yourpassword
    SMTP_FROM=your@example.com
+   PORT=3000
    ```
 2. サーバーを起動します。
    ```bash
@@ -155,3 +156,118 @@ VITE_EMAIL_API_URL=https://example.com/api/send
 3. デフォルトでは `http://localhost:3000/send` でメール送信エンドポイントが利用できます。
 
 フロントエンド側の `VITE_EMAIL_API_URL` をこのエンドポイントに合わせて設定してください。
+
+### メール送信機能の運用方法
+
+#### 開発環境での運用
+
+1. 開発中はターミナルを2つ使用し、フロントエンドとメールサーバーを別々に起動します：
+   ```bash
+   # ターミナル1: フロントエンド
+   npm run dev
+   
+   # ターミナル2: メールサーバー
+   npm run server:start
+   ```
+
+2. テスト用SMTPサーバーの利用:
+   - 開発中は [Mailtrap](https://mailtrap.io/) や [Ethereal Email](https://ethereal.email/) などのテスト用SMTPサービスの使用を推奨します
+   - これらのサービスではメール送信をシミュレートし、実際のアドレスにメールは配信されません
+
+3. トラブルシューティング:
+   - `npm run server:start`でエラーが発生する場合は、プロジェクトルートディレクトリにいることを確認してください
+   - package.jsonに`server:start`スクリプトが定義されていない場合は、以下を追加してください:
+     ```json
+     "scripts": {
+       // 他のスクリプト
+       "server:start": "ts-node server/index.ts"
+     }
+     ```
+   - ts-nodeがインストールされていない場合は以下のコマンドでインストールします:
+     ```bash
+     npm install -D ts-node
+     ```
+   - 必要な依存関係が不足している場合は以下をインストールします:
+     ```bash
+     npm install express nodemailer dotenv
+     npm install -D @types/express @types/nodemailer
+     ```
+
+#### 本番環境での運用
+
+1. サーバー設定:
+   - 本番環境では `.env.server.production` を作成し、適切なSMTP設定を行います
+   - セキュリティのため、`SMTP_PASS` は環境変数として直接設定することも検討してください
+
+2. プロセス管理:
+   - 本番環境では [PM2](https://pm2.keymetrics.io/) などのプロセス管理ツールを使用してサーバーを実行します
+   ```bash
+   # PM2のインストール
+   npm install -g pm2
+   
+   # メールサーバーの起動
+   pm2 start server/index.ts --name "mail-server" -- --interpreter node_modules/.bin/ts-node
+   
+   # 起動時に自動実行するよう設定
+   pm2 startup
+   pm2 save
+   ```
+
+3. エラーハンドリング:
+   - ログ監視を設定し、メール送信エラーを追跡してください
+   - クリティカルなメール送信の失敗時には管理者に通知される仕組みを検討します
+
+4. セキュリティ設定:
+   - 本番環境ではプロキシ（Nginx/Apacheなど）の背後にメールサーバーを配置し、直接外部からアクセスできないようにします
+   - CORS設定を適切に行い、信頼できるドメインからのリクエストのみを許可します
+   ```javascript
+   // server/index.tsに追加
+   import cors from 'cors';
+   
+   // CORSミドルウェアを設定
+   app.use(cors({
+     origin: process.env.ALLOWED_ORIGIN || 'https://yourdomain.com',
+     methods: ['POST']
+   }));
+   ```
+
+5. 監視と保守:
+   - 定期的にログを確認し、送信エラーやパフォーマンス問題を検出します
+   - SMTP認証情報の定期的な更新を行います
+
+#### API仕様
+
+メール送信APIは以下のJSONリクエストを受け付けます:
+
+```json
+POST /send
+{
+  "to": "recipient@example.com",
+  "subject": "メールの件名",
+  "text": "メール本文"
+}
+```
+
+成功時のレスポンス:
+```json
+{
+  "success": true
+}
+```
+
+エラー時のレスポンス:
+```json
+{
+  "error": "エラーメッセージ"
+}
+```
+
+#### パフォーマンス考慮事項
+
+1. 大量のメール送信が予想される場合:
+   - キューシステム（Bull, Kueなど）の導入を検討
+   - メール送信のバッチ処理化を検討
+
+2. 高可用性:
+   - 複数のSMTPプロバイダのフォールバック設定
+   - メール送信失敗時の自動リトライ機能の実装

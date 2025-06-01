@@ -1,12 +1,19 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 // Load environment variables from .env.server
 dotenv.config({ path: '.env.server' });
 
 const app = express();
 app.use(express.json());
+
+// CORSミドルウェアを設定
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGIN || '*',
+  methods: ['POST']
+}));
 
 const transport = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
